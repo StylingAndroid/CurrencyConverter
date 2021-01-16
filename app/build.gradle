@@ -1,0 +1,106 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.squareup.wire'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
+
+android {
+    compileSdkVersion AndroidSdk.compile
+    defaultConfig {
+        applicationId "com.stylingandroid.currencyconverter"
+        minSdkVersion AndroidSdk.min
+        targetSdkVersion AndroidSdk.target
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+        buildConfigField "String", "TRANSFERWISE_API_KEY", "\"$transferwiseApiKey\""
+        buildConfigField "String", "TRANSFERWISE_PROFILE_ID", "\"$transferwiseProfileId\""
+        buildConfigField "String", "TRANSFERWISE_BASE_URL", "\"$transferwiseBaseUrl\""
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+    sourceSets {
+        main.java.srcDirs += "$buildDir/generated/source/wire"
+    }
+    buildFeatures.viewBinding = true
+}
+
+dependencies {
+    implementation Libraries.kotlinStdLib
+    implementation Libraries.kotlinReflect
+    implementation Libraries.appCompat
+    implementation Libraries.material
+    implementation Libraries.ktxCore
+    implementation Libraries.ktxActivity
+    implementation Libraries.ktxFragment
+    implementation Libraries.constraintLayout
+    implementation Libraries.dataStore
+    implementation Libraries.lifecycleProcess
+    implementation Libraries.lifecycleService
+    implementation Libraries.lifecycleLivedata
+    implementation Libraries.lifecycleViewmodel
+    implementation Libraries.navigationFragment
+    implementation Libraries.hilt
+    implementation Libraries.hiltWork
+    implementation Libraries.hiltLifecycleViewmodel
+    implementation Libraries.roomRuntime
+    implementation Libraries.roomKtx
+    implementation Libraries.workRuntime
+    implementation Libraries.workRuntimeKtx
+    implementation Libraries.retrofit
+    implementation Libraries.okhttp
+    implementation Libraries.loggingInterceptor
+    implementation Libraries.moshi
+    implementation Libraries.retrofitMoshi
+    implementation Libraries.timber
+    implementation Libraries.wireRuntime
+    kapt Libraries.hiltAndroidCompiler
+    kapt Libraries.hiltCompiler
+    kapt Libraries.roomCompiler
+    coreLibraryDesugaring Libraries.coreLibraryDesugaring
+
+    testImplementation TestLibraries.junit
+}
+
+detekt {
+    version = "1.0.0"
+    failFast = true
+    reports {
+        xml {
+            destination = file("$project.buildDir/reports/detekt/detekt.xml")
+        }
+    }
+}
+
+ktlint {
+    android = true
+    version = "0.37.0"
+    ignoreFailures = false
+    reporters {
+        reporter "plain"
+        reporter "checkstyle"
+    }
+    filter {
+        exclude { projectDir.toURI().relativize(it.file.toURI()).path.contains("/generated/") }
+    }
+    outputToConsole = true
+}
+
+wire {
+    kotlin {
+        android = true
+    }
+}
