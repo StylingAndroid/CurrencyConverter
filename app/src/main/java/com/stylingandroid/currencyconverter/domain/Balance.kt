@@ -6,6 +6,6 @@ import java.util.Currency
 
 data class Balance(
     val currency: Currency,
-    val timestamp: Instant,
+    override val timestamp: Instant,
     val balance: BigDecimal
-)
+) : Timestamped(timestamp)

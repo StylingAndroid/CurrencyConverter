@@ -1,4 +1,4 @@
-package com.stylingandroid.currencyconverter.ui.appwidget
+package com.stylingandroid.currencyconverter.update
 
 import android.content.Context
 import androidx.work.WorkManager

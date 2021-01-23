@@ -6,7 +6,7 @@ import java.util.Currency
 
 interface CurrencyProvider {
 
-    suspend fun exchangeRates(from: Currency, to: Currency): ExchangeRate
+    suspend fun exchangeRates(from: Currency, to: Currency): ExchangeRate?
 
-    suspend fun balance(currency: Currency): Balance
+    suspend fun balance(currency: Currency): Balance?
 }

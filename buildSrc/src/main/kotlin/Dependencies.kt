@@ -1,5 +1,5 @@
-const val kotlinVersion = "1.4.30-M1"
-const val hiltVersion = "2.30.1-alpha"
+const val kotlinVersion = "1.4.30-RC"
+const val hiltVersion = "2.31.2-alpha"
 const val wireVersion = "3.5.0"
 
 object BuildPlugins {

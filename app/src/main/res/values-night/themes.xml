@@ -4,6 +4,7 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/saGreenLight</item>
         <item name="colorPrimaryDark">@color/saGreenDark</item>
+        <item name="colorAccent">@color/saGreenDark</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Status bar color. -->
         <!-- Customize your theme here. -->

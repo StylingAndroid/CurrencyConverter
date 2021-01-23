@@ -17,9 +17,6 @@ interface CurrencyDao {
     @Query("DELETE FROM ExchangeRateEntity")
     fun deleteAllExchangeRates()
 
-    @Query("DELETE FROM ExchangeRateEntity WHERE timestamp <= :expiry")
-    fun purgeExchangeRates(expiry: Long)
-
     @Query("SELECT * from BalanceEntity")
     fun getBalances(): List<BalanceEntity>
 
@@ -28,7 +25,4 @@ interface CurrencyDao {
 
     @Query("DELETE FROM BalanceEntity")
     fun deleteAllEBalances()
-
-    @Query("DELETE FROM BalanceEntity WHERE timestamp <= :expiry")
-    fun purgeBalance(expiry: Long)
 }

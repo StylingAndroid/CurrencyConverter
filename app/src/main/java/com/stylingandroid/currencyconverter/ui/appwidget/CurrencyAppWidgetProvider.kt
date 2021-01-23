@@ -30,6 +30,11 @@ class CurrencyAppWidgetProvider : AppWidgetProvider() {
         balance = intent.getStringExtra("BALANCE")
         converted = intent.getStringExtra("CONVERTED")
         super.onReceive(context, intent)
+        if (intent.action == AppWidgetManager.ACTION_APPWIDGET_UPDATE &&
+            (balance == null || converted == null)
+        ) {
+            updateScheduler.enqueueOneTimeWorker()
+        }
     }
 
     override fun onUpdate(context: Context, widgetManager: AppWidgetManager, widgetIds: IntArray) {

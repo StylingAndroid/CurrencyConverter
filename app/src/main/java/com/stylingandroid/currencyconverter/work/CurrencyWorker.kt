@@ -32,10 +32,19 @@ class CurrencyWorker @WorkerInject constructor(
     @Suppress("TooGenericExceptionCaught")
     override suspend fun doWork(): Result =
         try {
-            val result = repository.exchangeRates(ratesValidity)
+            val rate = repository.exchangeRates(ratesValidity)
             val balance = repository.balance(balanceValidity)
-            val targetBalance = result.rate.multiply(balance.balance)
-            Timber.d("Worker ran: $result $balance $targetBalance")
+            val balanceString = balance?.balance?.let { balanceValue ->
+                rate?.from?.let { fromCurrency ->
+                    currencyFormat(fromCurrency).format(balanceValue)
+                }
+            }
+            val convertedString = balance?.balance?.let { balanceValue ->
+                rate?.let { rateValue ->
+                    currencyFormat(rateValue.to).format(rateValue.rate.multiply(balanceValue))
+                }
+            }
+            Timber.d("Worker ran: $rate $balance $convertedString")
             appContext.sendBroadcast(
                 Intent(appContext, CurrencyAppWidgetProvider::class.java).apply {
                     action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
@@ -45,8 +54,9 @@ class CurrencyWorker @WorkerInject constructor(
                             ComponentName(appContext, CurrencyAppWidgetProvider::class.java)
                         )
                     )
-                    putExtra("BALANCE", currencyFormat(result.from).format(balance.balance))
-                    putExtra("CONVERTED", currencyFormat(result.to).format(targetBalance))
+
+                    putExtra("BALANCE", balanceString)
+                    putExtra("CONVERTED", convertedString)
                 }
             )
             Result.success()

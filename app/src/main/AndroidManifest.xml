@@ -4,6 +4,7 @@
     package="com.stylingandroid.currencyconverter">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name=".CurrencyConverterApplication"
@@ -37,6 +38,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/currency_appwidget_info" />
         </receiver>
+
     </application>
 
 </manifest>

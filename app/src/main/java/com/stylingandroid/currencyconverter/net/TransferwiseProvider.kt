@@ -12,23 +12,32 @@ class TransferwiseProvider @Inject constructor(
     private val service: TransferwiseApiService
 ) : CurrencyProvider {
 
-    override suspend fun exchangeRates(from: Currency, to: Currency): ExchangeRate =
-        service.rates(from.currencyCode, to.currencyCode).first().toDomainObject()
+    @Suppress("TooGenericExceptionCaught")
+    override suspend fun exchangeRates(from: Currency, to: Currency): ExchangeRate? =
+        try {
+            service.rates(from.currencyCode, to.currencyCode).first().toDomainObject()
+        } catch (throwable: Throwable) {
+            null
+        }
 
-    override suspend fun balance(currency: Currency): Balance {
-        return service.balances(BuildConfig.TRANSFERWISE_PROFILE_ID)
-            .first()
-            .balances
-            .filter {
-                it.currency == currency.currencyCode
-            }
-            .map {
-                Balance(
-                    currency = currency,
-                    timestamp = Instant.now(),
-                    balance = it.amount.value
-                )
-            }
-            .first()
-    }
+    @Suppress("TooGenericExceptionCaught")
+    override suspend fun balance(currency: Currency): Balance? =
+        try {
+            service.balances(BuildConfig.TRANSFERWISE_PROFILE_ID)
+                .first()
+                .balances
+                .filter {
+                    it.currency == currency.currencyCode
+                }
+                .map {
+                    Balance(
+                        currency = currency,
+                        timestamp = Instant.now(),
+                        balance = it.amount.value
+                    )
+                }
+                .first()
+        } catch (throwable: Throwable) {
+            null
+        }
 }

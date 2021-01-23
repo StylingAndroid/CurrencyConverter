@@ -9,6 +9,6 @@ data class ExchangeRate(
     val from: Currency,
     val to: Currency,
     val date: LocalDateTime,
-    val timestamp: Instant,
+    override val timestamp: Instant,
     val rate: BigDecimal
-)
+) : Timestamped(timestamp)
